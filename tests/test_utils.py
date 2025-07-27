@@ -13,3 +13,23 @@ def test_open_json_correct():
 
 def test_create_objects_empty():
     assert create_objects([]) == []
+
+
+def test_create_objects_not_empty():
+    input_data = [
+        {
+            "name": "Смартфоны",
+            "description": "Смартфоны, как средство не только коммуникации, но и получение"
+            "дополнительных функций для удобства жизни",
+            "products": [
+                {
+                    "name": "Samsung Galaxy C23 Ultra",
+                    "description": "256GB, Серый цвет, 200MP камера",
+                    "price": 180000.0,
+                    "quantity": 5,
+                }
+            ],
+        }
+    ]
+    result = create_objects(input_data)
+    assert result[0].name == "Смартфоны"
