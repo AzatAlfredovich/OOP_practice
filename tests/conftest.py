@@ -18,8 +18,10 @@ def sample_products():
 
 
 @pytest.fixture
-def sample_category(sample_products):
-    return Category("Test Category", "Test Category Description", sample_products)
+def sample_category():
+    product_1 = Product("Product1", "Desc1", 100.0, 5)
+    product_2 = Product("Product2", "Desc2", 200.0, 10)
+    return Category("Test Category", "Test Category Description", [product_1, product_2])
 
 
 @pytest.fixture
