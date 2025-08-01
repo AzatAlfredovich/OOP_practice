@@ -8,6 +8,7 @@
 - Создание категорий товаров
 - Управление товарами внутри категорий
 - Автоматический подсчет количества категорий и товаров
+- Перебор продуктов в рамках категории
 - Загрузка данных из JSON-файла
 ---
 
@@ -20,11 +21,23 @@
 
 ```python
 class Product:
-    def __init__(self, name, description, price, quantity):
+    def __init__(self, name, description, price, quantity) -> None:
         self.name = name
         self.description = description
-        self.price = price
+        self.__price = price
         self.quantity = quantity
+
+    def __str__(self):
+        """
+        Строковое отображение объекта Product
+        """
+        return f"{self.name}, {self.price} руб. Остаток: {self.quantity} шт."
+
+    def __add__(self, other):
+        """
+        Складывание стоимости продуктов
+        """
+        return self.__price * self.quantity + other.__price * other.quantity
 ```
 
 ### `Category`
@@ -32,10 +45,41 @@ class Product:
 
 ```python
 class Category:
-    def __init__(self, name, description, products):
+    def __init__(self, name, description, products) -> None:
+
         self.name = name
         self.description = description
-        self.products = products
+        self.__products = products if products else []
+        self.__products_count = len(products)  # Счетчик товаров конкретной категории
+        Category.category_count += 1
+        Category.product_count += len(products) if products else 0
+
+    def __str__(self):
+        """
+        Строковое представление объекта Category
+        """
+        total_quantity = sum(product.quantity for product in self.__products)
+        return f"{self.name}, количество продуктов: {total_quantity} шт."
+```
+
+### `CategoryIterator`
+Класс для перебора продуктов в рамках категории:
+
+```python
+class CategoryIterator:
+        def __init__(self, category_obj: Category):
+        self._products = category_obj.get_products()
+        self._index = 0
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self._index < len(self._products):
+            product = self._products[self._index]
+            self._index += 1
+            return product
+        raise StopIteration
 ```
 ---
 
@@ -86,13 +130,14 @@ data = read_json('путь до файла')
 
 ### Вывод информации
 ```python
-for category in categories:
-    print(category)
-    for product in category.products:
-        print(f"  {product}")
+def __str__(self):
+"""Строковое отображение объекта Product"""
+    return f"{self.name}, {self.price} руб. Остаток: {self.quantity} шт."
 
-print(f"\nВсего категорий: {Category.category_count}")
-print(f"Всего товаров: {Product.product_count}")
+def __str__(self):
+"""Строковое представление объекта Category"""
+    total_quantity = sum(product.quantity for product in self.__products)
+    return f"{self.name}, количество продуктов: {total_quantity} шт."
 ```
 ---
 
@@ -107,6 +152,7 @@ Git-репозиторий автора: [Azat Khaliullin](https://github.com/Az
 
 Команда для запуска тестов
 ```
+
 pytest --cov
 ```
 ---

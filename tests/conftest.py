@@ -1,11 +1,16 @@
 import pytest
 
-from src.main import Category, Product
+from src.main import Category, CategoryIterator, Product
 
 
 @pytest.fixture
 def sample_product():
     return Product("Test Product", "Test Description", 100.0, 10)
+
+
+@pytest.fixture
+def sample_product_2():
+    return Product("Test Product", "Test Description", 200.0, 5)
 
 
 @pytest.fixture
@@ -27,3 +32,13 @@ def sample_category():
 @pytest.fixture
 def empty_category():
     return Category("Empty Category", "No products", [])
+
+
+@pytest.fixture
+def not_empty_category():
+    return Category("Test Category", "Have products", ["Рыба", "Мясо"])
+
+
+@pytest.fixture
+def category_iterator_fixture(sample_category):
+    return CategoryIterator(sample_category)
