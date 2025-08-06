@@ -1,6 +1,6 @@
 import pytest
 
-from src.main import Category, CategoryIterator, Product, Smartphone, LawnGrass
+from src.main import Category, CategoryIterator, LawnGrass, Product, Smartphone
 
 
 @pytest.fixture
@@ -42,6 +42,7 @@ def not_empty_category():
 @pytest.fixture
 def category_iterator_fixture(sample_category):
     return CategoryIterator(sample_category)
+
 
 @pytest.fixture
 def smartphone_1_fixture():

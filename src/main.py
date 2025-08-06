@@ -155,6 +155,7 @@ class Smartphone(Product):
         base_info = super().__str__()
         return f"{base_info} | Модель: {self.model}, Память: {self.memory}, Цвет: {self.color}"
 
+
 class LawnGrass(Product):
     def __init__(self, name, description, price, quantity, country, germination_period, color):
         super().__init__(name, description, price, quantity)
