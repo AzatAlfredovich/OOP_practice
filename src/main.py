@@ -5,7 +5,7 @@ class Product:
     price: float
     quantity: int
 
-    def __init__(self, name, description, price, quantity) -> None:
+    def __init__(self, name, description, price, quantity):
         self.name = name
         self.description = description
         self.__price = price
@@ -21,9 +21,9 @@ class Product:
         """
         Складывание стоимости продуктов
         """
-        if isinstance(other, Product):
-            return self.price * self.quantity + other.price * other.quantity
-        return NotImplemented
+        if type(self) != type(other):
+            raise TypeError("Можно складывать только объекты одного типа")
+        return self.price * self.quantity + other.price * other.quantity
 
     @property
     def price(self):
