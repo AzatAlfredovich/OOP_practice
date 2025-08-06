@@ -79,6 +79,10 @@ def test_if_product_not_type_product():
 def test_add_method_in_product_class(sample_product, sample_product_2):
     assert sample_product + sample_product_2 == 2000
 
+def test_add_method_error_in_product_class(sample_product, sample_product_2):
+    with pytest.raises(TypeError):
+        assert sample_product + 1
+
 
 # Тесты для класса Category
 
@@ -134,3 +138,29 @@ def test_str_category(sample_category):
 def test_iter_returns_self(sample_category):
     new_example = CategoryIterator(sample_category)
     assert new_example.__iter__() is new_example
+
+
+def test_smartphone_initialization(smartphone_1_fixture):
+    assert smartphone_1_fixture.name == "iphone"
+    assert smartphone_1_fixture.description == "good"
+    assert smartphone_1_fixture.price == 2000
+    assert smartphone_1_fixture.quantity == 2
+    assert smartphone_1_fixture.efficiency == "30%"
+    assert smartphone_1_fixture.model == "13"
+    assert smartphone_1_fixture.memory == "256gb"
+    assert smartphone_1_fixture.color == "blue"
+
+def test_smartphone_category(smartphone_1_fixture):
+    assert str(smartphone_1_fixture) == "iphone, 2000 руб. Остаток: 2 шт. | Модель: 13, Память: 256gb, Цвет: blue"
+
+def test_lawngrass_initialization(lawngrass_1_fixture):
+    assert lawngrass_1_fixture.name == "Сорняк!"
+    assert lawngrass_1_fixture.description == "бесполезный"
+    assert lawngrass_1_fixture.price == 1
+    assert lawngrass_1_fixture.quantity == 1000
+    assert lawngrass_1_fixture.country == "Удмуртия"
+    assert lawngrass_1_fixture.germination_period == "12 часов"
+    assert lawngrass_1_fixture.color == "серый"
+
+def test_lawngrass_category(lawngrass_1_fixture):
+    assert str(lawngrass_1_fixture) == "Сорняк!, 1 руб. Остаток: 1000 шт. | Период роста: 12 часов, Страна: Удмуртия"

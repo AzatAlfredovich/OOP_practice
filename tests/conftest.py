@@ -1,6 +1,6 @@
 import pytest
 
-from src.main import Category, CategoryIterator, Product
+from src.main import Category, CategoryIterator, Product, Smartphone, LawnGrass
 
 
 @pytest.fixture
@@ -42,3 +42,12 @@ def not_empty_category():
 @pytest.fixture
 def category_iterator_fixture(sample_category):
     return CategoryIterator(sample_category)
+
+@pytest.fixture
+def smartphone_1_fixture():
+    return Smartphone("iphone", "good", 2000, 2, "30%", "13", "256gb", "blue")
+
+
+@pytest.fixture
+def lawngrass_1_fixture():
+    return LawnGrass("Сорняк!", "бесполезный", 1, 1000, "Удмуртия", "12 часов", "серый")
