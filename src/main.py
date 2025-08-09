@@ -1,4 +1,28 @@
-class Product:
+from abc import ABC, abstractmethod
+
+
+class BaseProduct(ABC):
+    @abstractmethod
+    def __str__(self) -> str:
+        pass
+
+    @property
+    @abstractmethod
+    def price(self) -> float:
+        pass
+
+    @price.setter
+    @abstractmethod
+    def price(self, value: float) -> None:
+        pass
+
+
+class LoggerMixin:
+    def __init__(self, *args, **kwargs):
+        print(f"Создан объект класса {self.__class__.__name__} с аргументами: {args}, {kwargs}")
+
+
+class Product(LoggerMixin, BaseProduct):
 
     name: str
     description: str
@@ -6,6 +30,7 @@ class Product:
     quantity: int
 
     def __init__(self, name, description, price, quantity):
+        super().__init__(name, description, price, quantity)
         self.name = name
         self.description = description
         self.__price = price
@@ -16,6 +41,9 @@ class Product:
         Строковое отображение объекта Product
         """
         return f"{self.name}, {self.price} руб. Остаток: {self.quantity} шт."
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}({self.name!r}, {self.description!r}, {self.price}, {self.quantity})"
 
     def __add__(self, other):
         """

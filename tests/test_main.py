@@ -168,3 +168,23 @@ def test_lawngrass_initialization(lawngrass_1_fixture):
 
 def test_lawngrass_category(lawngrass_1_fixture):
     assert str(lawngrass_1_fixture) == "Сорняк!, 1 руб. Остаток: 1000 шт. | Период роста: 12 часов, Страна: Удмуртия"
+
+
+def test_logger_mixin_str():
+    product = Product("SomeItem", "Description", 1000.0, 12)
+    assert str(product) == "SomeItem, 1000.0 руб. Остаток: 12 шт."
+
+
+def test_logger_mixin_str_2(capsys):
+    Product("SomeItem", "Description", 1000.0, 12)
+    message = capsys.readouterr()
+    assert (
+        message.out.strip()
+        == "Создан объект класса Product с аргументами: ('SomeItem', 'Description', 1000.0, 12), {}"
+    )
+
+
+def test_product_repr():
+    product = Product("Кофе", "Арабика средней обжарки", 150.0, 10)
+    expected_repr = "Product('Кофе', 'Арабика средней обжарки', 150.0, 10)"
+    assert repr(product) == expected_repr, f"Ошибка: ожидалось '{expected_repr}', получено '{repr(product)}'"
