@@ -1,6 +1,10 @@
 from abc import ABC, abstractmethod
 
 
+class InvalidQuantityException(Exception):
+    pass
+
+
 class BaseProduct(ABC):
     @abstractmethod
     def __str__(self) -> str:
@@ -30,6 +34,10 @@ class Product(LoggerMixin, BaseProduct):
     quantity: int
 
     def __init__(self, name, description, price, quantity):
+
+        if quantity == 0:
+            raise ValueError("Товар с нулевым количеством не может быть добавлен")
+
         super().__init__(name, description, price, quantity)
         self.name = name
         self.description = description
@@ -37,9 +45,6 @@ class Product(LoggerMixin, BaseProduct):
         self.quantity = quantity
 
     def __str__(self):
-        """
-        Строковое отображение объекта Product
-        """
         return f"{self.name}, {self.price} руб. Остаток: {self.quantity} шт."
 
     def __repr__(self):
@@ -62,9 +67,6 @@ class Product(LoggerMixin, BaseProduct):
         if new_price <= 0:
             print("Цена не должна быть нулевая или отрицательная")
             return
-
-        # доп.задание при понижении цены (проверка цены)
-
         current_price = self.__price
         if new_price < current_price:
             confirmation = input(
@@ -121,9 +123,6 @@ class Category:
         Category.product_count += len(products) if products else 0
 
     def __str__(self):
-        """
-        Строковое представление объекта Category
-        """
         total_quantity = sum(product.quantity for product in self.__products)
         return f"{self.name}, количество продуктов: {total_quantity} шт."
 
@@ -136,13 +135,22 @@ class Category:
 
     def add_product(self, product: Product) -> None:
         """
-        Добавляет продукт и увеличивает счетчик
+        Добавление продукта и увеличение счетчика
         """
-        if not isinstance(product, Product):
-            raise TypeError("Можно добавить только объект класса Product или его наследника")
+        try:
+            if not isinstance(product, Product):
+                raise TypeError("Можно добавить только объект класса Product или его наследника")
+            if product.quantity == 0:
+                raise InvalidQuantityException("Нельзя добавить товар с нулевым количеством в категорию")
 
-        self.__products.append(product)
-        Category.product_count += 1
+            self.__products.append(product)
+            Category.product_count += 1
+        except InvalidQuantityException as e:
+            print(e)
+        else:
+            print(f"Товар {product.name} успешно добавлен.")
+        finally:
+            print("Обработка добавления товара завершена.")
 
     def get_products(self) -> list[Product]:
         """
@@ -150,10 +158,20 @@ class Category:
         """
         return self.__products
 
+    def middle_price(self) -> float:
+        """
+        Подсчет среднего ценника товаров
+        """
+        try:
+            total = sum(p.price for p in self.__products)
+            return total / len(self.__products)
+        except ZeroDivisionError:
+            return 0
+
 
 class CategoryIterator:
     """
-    Итератор для перебора продуктов в категории.
+    Итератор для перебора продуктов в категории
     """
 
     def __init__(self, category_obj: Category):
@@ -172,6 +190,10 @@ class CategoryIterator:
 
 
 class Smartphone(Product):
+    """
+    Дочерний класс от класса Product для смартфонов
+    """
+
     def __init__(self, name, description, price, quantity, efficiency, model, memory, color):
         super().__init__(name, description, price, quantity)
         self.efficiency = efficiency
@@ -185,6 +207,10 @@ class Smartphone(Product):
 
 
 class LawnGrass(Product):
+    """
+    Дочерний класс от класса Product для газонной травы
+    """
+
     def __init__(self, name, description, price, quantity, country, germination_period, color):
         super().__init__(name, description, price, quantity)
         self.country = country

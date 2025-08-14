@@ -5,7 +5,9 @@ from src.main import Category, Product
 
 
 def read_json(path: str) -> list:
-    """Функция, которая преобразует JSON-объект в Python-объект"""
+    """
+    Функция, которая преобразует JSON-объект в Python-объект
+    """
     full_path = os.path.abspath(path)
     try:
         with open(full_path, "r", encoding="utf-8") as file:
